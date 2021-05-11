@@ -14,13 +14,13 @@ class ParentGoal(m.Model):
   priority=m.CharField(max_length=999,choices=STAT)
   description= hf()
   due_date= m.DateField(blank=True)
-  sub_goal=m.ManyToManyField(SubGoal)
-  team=m.ManyToManyField(Team)
-  metric=m.ManyToManyField(GoalMetric)
-  portfolio=m.ManyToManyField(Portfolio)
-  project=m.ManyToManyField(Project)
+  #sub_goal=m.ManyToManyField(SubGoal)
+#  team=m.ManyToManyField(Team)
+  #metric=m.ManyToManyField(GoalMetric)
+#  portfolio=m.ManyToManyField(Portfolio)
+ # project=m.ManyToManyField(Project)
   creator=m.ForeignKey(U,on_delete=m.CASCADE)
-  collaborator=m.ManyToManyField(U)
+  collaborator=m.ManyToManyField(U,related_name='goal_collaborators')
   def __str__(self):
     return self.title
 
@@ -31,12 +31,12 @@ class SubGoal(m.Model):
   title = m.CharField(max_length=999)
   description= hf()
   due_date= m.DateField(blank=True)
-  sub_goal=m.ManyToManyField(SubGoal)
-  team=m.ManyToManyField(Team)
-  metric=m.ManyToManyField(GoalMetric)
+#  sub_goal=m.ManyToManyField(SubGoal)
+#  team=m.ManyToManyField(Team)
+  #metric=m.ManyToManyField(GoalMetric)
   creator=m.ForeignKey(U,on_delete=m.CASCADE)
   parent_goal=m.ForeignKey(ParentGoal,on_delete=m.CASCADE)
-  collaborator=m.ManyToManyField(U)
+  #collaborator=m.ManyToManyField(U)
   def __str__(self):
     return self.title
 
@@ -54,7 +54,7 @@ class Team(m.Model):
 class Task(m.Model):
   uid = m.UUIDField(u4)
   title = m.CharField(max_length=999)
-  status=m.CharField(max_length=999,choices=S)
+  status=m.CharField(max_length=999,choices=STAT)
   def __str__(self):
     return self.title
   class Meta:
@@ -86,9 +86,9 @@ class Portfolio(m.Model):
 class Project(m.Model):
   uid=m.UUIDField(u4)
   title=m.CharField(max_length=999)
-  goal=m.ManyToManyField(goal)
+  goal=m.ManyToManyField(ParentGoal)
   slug=m.SlugField(max_length=999)
-  status=m.CharField(max_length=999,choices=S)
+  status=m.CharField(max_length=999,choices=STAT)
  # section=m.ManyToManyField(section)
 #  portfolio=m.ManyToManyField(portfolio)
   member=m.ManyToManyField(U)
